@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Someone8448/node-mpp/issues"
   },
-  "homepage": "https://github.com/Someone8448/node-mpp#readme"
+  "homepage": "https://github.com/Someone8448/node-mpp#readme",
+  "dependencies": {
+    "color-convert": "^2.0.1",
+    "dotenv": "^16.3.1",
+    "mppclone-client": "^1.1.3"
+  }
 }

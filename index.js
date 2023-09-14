@@ -1,3 +1,4 @@
+require("dotenv").config();
 const rl = new (require("readline").Interface)({
     input: process.stdin,
     output: process.stdout,
@@ -58,7 +59,10 @@ process.stdin.on("keypress", (key, info) => {
         message = message.substr(0, message.length - 1);
     } else message += info.sequence;
 });
-const client = new (require("mppclone-client"))(config.uri, config.token);
+const client = new (require("mppclone-client"))(
+    config.uri,
+    process.env.MPPCLONE_TOKEN
+);
 var test = true;
 client.start();
 client.setChannel("lobby");
