@@ -1,32 +1,46 @@
 require("dotenv").config();
+
 const rl = new (require("readline").Interface)({
     input: process.stdin,
     output: process.stdout,
     prompt: ""
 });
+
 const fs = require("fs");
 const d = require("./db.js");
+
 var db = d("data.json", { mutes: [], volume: {} });
+
 db.read();
+
 var getVolume = id => {
     if (db.data.volume[id] === undefined) return 1;
     return db.data.volume[id];
 };
+
 const config = require("./config.json");
 const convert = require("color-convert");
+
 var message = "";
 var output = "Type 'help' to begin.";
+
 process.stdin.setRawMode(true);
+
 process.stdin.on("keypress", (key, info) => {
     if (info.name === "return") {
         var cmd = message.split(" ")[0];
         var args = message.substr(cmd.length).trim();
         var argsplit = args.split(" ");
+
         message = "";
+
         if (cmd === "test") output = "hi there";
+
         if (cmd === "help")
             output = "Commands: test, help, channel, mute, volume, say";
+
         if (cmd === "channel") client.setChannel(args);
+
         if (cmd === "mute") {
             if (args.length == 0)
                 return (output = "Usage: mute [id] (boolean)");
@@ -43,6 +57,7 @@ process.stdin.on("keypress", (key, info) => {
             }
             db.write();
         }
+
         if (cmd === "volume") {
             if (args.length == 0)
                 return (output = "Usage: volume [id] [percent]");
@@ -54,18 +69,23 @@ process.stdin.on("keypress", (key, info) => {
             db.write();
             output = `Set ${argsplit[0]}'s volume to ${volume}%`;
         }
+
         if (cmd === "say") client.sendArray([{ m: "a", message: args }]);
     } else if (info.name === "backspace") {
         message = message.substr(0, message.length - 1);
     } else message += info.sequence;
 });
+
 const client = new (require("mppclone-client"))(
     config.uri,
     process.env.MPPCLONE_TOKEN
 );
+
 var test = true;
+
 client.start();
 client.setChannel("lobby");
+
 const midikeys = [
     "a-1",
     "as-1",
@@ -156,16 +176,21 @@ const midikeys = [
     "b6",
     "c7"
 ];
+
 const easymidi = require("easymidi");
 const midi = new easymidi.Output(config.output);
+
 client.on("n", n => {
     if (db.data.mutes.includes(n.p)) return;
+
     if (test) {
         var mapped = {};
+
         n.n.forEach(a => {
             if (!mapped[a.d]) mapped[a.d] = [];
             mapped[a.d].push(a);
         });
+
         Object.keys(mapped).forEach(t => {
             setTimeout(() => {
                 mapped[t].forEach(a => {
@@ -209,9 +234,12 @@ client.on("n", n => {
         });
     }
 });
+
 var nps = { nps: {} };
 var keypresses = {};
+
 midikeys.forEach(key => (keypresses[key] = false));
+
 client.on("n", msg => {
     var date = Date.now();
     if (!nps.nps[msg.p]) nps.nps[msg.p] = {};
@@ -220,6 +248,7 @@ client.on("n", msg => {
         .forEach(a => delete nps.nps[msg.p][a]);
     nps.nps[msg.p][date] = msg.n.filter(n => n.s != 1).length;
 });
+
 nps.getNps = id => {
     if (!nps.nps[id]) return 0;
     var date = Date.now();
@@ -230,11 +259,13 @@ nps.getNps = id => {
     Object.values(nps.nps[id]).forEach(a => (n += a));
     return n;
 };
+
 (async () => {
     var chalk = await import("chalk");
     var chalk = new chalk.Chalk();
     setInterval(() => {
         console.clear();
+
         process.stdout.write(
             (message.length == 0
                 ? chalk.hex("#666666")("You can type here.")
@@ -264,6 +295,7 @@ nps.getNps = id => {
                 "\n"
         );
     }, 500);
+
     var chat = [];
 
     client.on("a", msg => {
@@ -272,6 +304,7 @@ nps.getNps = id => {
         );
         if (chat.length > 10) chat.splice(0, 1);
     });
+
     client.on("c", c => {
         chat = [];
         c.c
@@ -282,6 +315,7 @@ nps.getNps = id => {
                         msg.a
                     }`
                 );
+
                 if (chat.length > 10) chat.splice(0, 1);
             });
     });
