@@ -19,6 +19,7 @@
   "dependencies": {
     "color-convert": "^2.0.1",
     "dotenv": "^16.3.1",
+    "easymidi": "^3.1.0",
     "mppclone-client": "^1.1.3"
   }
 }
