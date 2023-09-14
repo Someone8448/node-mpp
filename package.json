@@ -1,0 +1,25 @@
+{
+    "name": "mpp",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Someone8448/node-mpp.git"
+    },
+    "author": "Someone8448",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Someone8448/node-mpp/issues"
+    },
+    "homepage": "https://github.com/Someone8448/node-mpp#readme",
+    "dependencies": {
+        "color-convert": "^2.0.1",
+        "dotenv": "^16.3.1",
+        "easymidi": "^3.1.0",
+        "mppclone-client": "^1.1.3"
+    }
+}
